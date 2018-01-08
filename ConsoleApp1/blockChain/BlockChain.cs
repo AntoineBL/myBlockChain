@@ -81,12 +81,7 @@ namespace ConsoleApp1
          */
         public void searchBlock(String data)
         {
-            Block newBlock = generateNewBlock(data);
-            if (newBlock.isValidNewBlock(getBlockI(this.blockChain.Count - 2)))
-            {
-                this.blockChain.Add(newBlock);
-            }
-                
+            this.blockChain.Add(generateNewBlock(data));            
         }
 
         public Block getBlockI(int i)

@@ -93,7 +93,7 @@ namespace ConsoleApp1
             {
                 val++;
                 value = random.Next();
-                hashValue = mySHA256.ComputeHash(Encoding.ASCII.GetBytes(index.ToString() + previousHash.ToString() + timestamp + data + ));
+                hashValue = mySHA256.ComputeHash(Encoding.ASCII.GetBytes(index + previousHash.ToString() + timestamp + data + value));
             } while (!proofOfWork(difficult, hashValue));
             Console.WriteLine("   number of iteration for find hash"+ val);
             this.value = value;
@@ -142,7 +142,8 @@ namespace ConsoleApp1
 
         public byte[] calculateHashForBlock()
         {
-            return calculateHash(this.index, this.previousHash, this.timestamp, this.data);
+            SHA256 mySHA256 = SHA256Managed.Create();
+            return mySHA256.ComputeHash(Encoding.ASCII.GetBytes(this.index + this.previousHash.ToString() + this.timestamp + this.data + this.value));
         }
 
         
