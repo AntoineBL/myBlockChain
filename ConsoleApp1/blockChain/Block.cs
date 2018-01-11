@@ -5,14 +5,15 @@ using System.Text;
 
 namespace ConsoleApp1
 {
+    
     class Block
     {
-        private int index;
-        private Byte[] previousHash;
-        private DateTime timestamp;
-        private String data;
-        private Byte[] hash;
-        private int value;
+        public int index;
+        public Byte[] previousHash;
+        public DateTime timestamp;
+        public String data;
+        public Byte[] hash;
+        public int value;
 
         public DateTime getTimestamp()
         {
@@ -34,7 +35,7 @@ namespace ConsoleApp1
             this.previousHash = Enumerable.Repeat((byte)0x0, 256).ToArray(); ;
             this.timestamp = DateTime.Now;
             this.data = "816534932c2b7154836da6afc367695e6337db8a921823784c14378abed4f7d7";
-            this.hash = calculateHash(this.index, this.previousHash, this.timestamp, this.data);
+            this.hash =  calculateHash(this.index, this.previousHash, this.timestamp, this.data);
         }
 
         public Block(int index, Byte[] previousHash, DateTime timestamp, String data) {
@@ -57,7 +58,7 @@ namespace ConsoleApp1
             byte[] difficult = Enumerable.Repeat((byte)0x00, 32).ToArray();
             difficult[31] = 0xFF;
             difficult[30] = 0xFF;
-            difficult[29] = 0xFF;
+            //difficult[29] = 0xFF;
             /*difficult[28] = 0xFF;
             difficult[27] = 0xFF;
             difficult[26] = 0xFF;
@@ -95,7 +96,7 @@ namespace ConsoleApp1
                 value = random.Next();
                 hashValue = mySHA256.ComputeHash(Encoding.ASCII.GetBytes(index + previousHash.ToString() + timestamp + data + value));
             } while (!proofOfWork(difficult, hashValue));
-            Console.WriteLine("   number of iteration for find hash"+ val);
+            //Console.WriteLine("   number of iteration for find hash"+ val);
             this.value = value;
             return hashValue;
         }
@@ -161,10 +162,6 @@ namespace ConsoleApp1
         {
             return this.index;
         }
-
-
-   
-
 
     }
 }

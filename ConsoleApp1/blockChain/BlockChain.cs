@@ -8,7 +8,7 @@ namespace ConsoleApp1
 {
     class BlockChain
     {
-        List<Block> blockChain;
+        public List<Block> blockChain { get; set; }
 
         public BlockChain()
         {
@@ -88,6 +88,14 @@ namespace ConsoleApp1
         {
             return this.blockChain[i];
      
+        }
+
+        public void toString()
+        {
+            for(int i=0; i<this.blockChain.Count; i++)
+            {
+                Console.WriteLine(this.blockChain[i].getIndex());
+            }
         }
 
         
