@@ -12,12 +12,12 @@ namespace myBlockChain.test
         {
             Console.WriteLine("my Block Chain");
             BlockChain myBlockChaine = new BlockChain();
-            Console.WriteLine(myBlockChaine.getBlockI(0).getIndex() + " " + myBlockChaine.getBlockI(0).getData());
+            Console.WriteLine(myBlockChaine.getBlockI(0).index + " " + myBlockChaine.getBlockI(0).data);
             for (int i=1; i<10; i++)
             {
                 //Thread.Sleep(1000);
                 myBlockChaine.searchBlock("test");
-                Console.WriteLine(myBlockChaine.getBlockI(i).getIndex()+" "+ myBlockChaine.getBlockI(i).getData());
+                Console.WriteLine(myBlockChaine.getBlockI(i).index+" "+ myBlockChaine.getBlockI(i).data);
             }
 
             Console.WriteLine(myBlockChaine.isValidChain());

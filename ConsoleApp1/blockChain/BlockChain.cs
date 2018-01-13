@@ -3,20 +3,21 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using Newtonsoft.Json;
+using myBlockChain.blockChain;
 
 namespace ConsoleApp1
 {
     class BlockChain
     {
-        public List<Block> blockChain { get; set; }
+        public List<_Block> blockChain { get; set; }
 
         public BlockChain()
         {
-            this.blockChain = new List<Block>();
-            this.blockChain.Add(new Block());
+            this.blockChain = new List<_Block>();
+            this.blockChain.Add(new GenesisBlock());
         }
 
-        public BlockChain(List<Block> blockChain)
+        public BlockChain(List<_Block> blockChain)
         {
             this.blockChain = blockChain;
         }
@@ -35,7 +36,7 @@ namespace ConsoleApp1
             }
         }*/
 
-        public Block getLatestBlock()
+        public _Block getLatestBlock()
         {
             return this.blockChain.Last();
         }
@@ -45,7 +46,7 @@ namespace ConsoleApp1
          */
         public Boolean isValidChain () {
 
-            if (this.blockChain[0].Equals(new Block())/*JsonConvert.SerializeObject(this.blockChain[0]) != JsonConvert.SerializeObject(new Block())*/)
+            if (this.blockChain[0].Equals(new GenesisBlock())/*JsonConvert.SerializeObject(this.blockChain[0]) != JsonConvert.SerializeObject(new Block())*/)
             {
                 return false;
             }
@@ -68,12 +69,12 @@ namespace ConsoleApp1
         /**
          * Generate a new block for the block chain
          */
-        public Block generateNewBlock(String blockData)
+        public _Block generateNewBlock(String blockData)
         {
             var previousBlock = getLatestBlock();
-            var nextIndex = previousBlock.getIndex() + 1;
+            var nextIndex = previousBlock.index + 1;
             var nextTimestamp = DateTime.Now;
-            return new Block(nextIndex, previousBlock.getHash(), nextTimestamp, blockData);
+            return new Block(nextIndex, previousBlock.hash, nextTimestamp, blockData);
         }
 
         /**
@@ -84,7 +85,7 @@ namespace ConsoleApp1
             this.blockChain.Add(generateNewBlock(data));            
         }
 
-        public Block getBlockI(int i)
+        public _Block getBlockI(int i)
         {
             return this.blockChain[i];
      
@@ -94,7 +95,7 @@ namespace ConsoleApp1
         {
             for(int i=0; i<this.blockChain.Count; i++)
             {
-                Console.WriteLine(this.blockChain[i].getIndex());
+                Console.WriteLine(this.blockChain[i].index);
             }
         }
 
