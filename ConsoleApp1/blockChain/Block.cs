@@ -16,7 +16,7 @@ namespace ConsoleApp1
             this.previousHash = previousHash;
             this.timestamp = timestamp;
             this.data = data;
-            this.hash = calculateHash(index, previousHash, timestamp, data);
+            this.hash = multiThreadhash(index, previousHash, timestamp, data);
         }
     }
 }

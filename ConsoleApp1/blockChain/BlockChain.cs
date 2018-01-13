@@ -50,13 +50,12 @@ namespace ConsoleApp1
             {
                 return false;
             }
-            //List<Block> tempBlocks = new List<Block>();
-            //tempBlocks.Add(blockchainToValidate[0]);
+
             for (int i = 1; i < this.blockChain.Count; i++)
             {
                 if (this.blockChain[i].isValidNewBlock(this.blockChain[i-1]))
                 {
-                    //tempBlocks.Add(blockchainToValidate[i]);
+                   
                 }
                 else
                 {

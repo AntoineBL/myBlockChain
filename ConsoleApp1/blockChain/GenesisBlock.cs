@@ -13,7 +13,7 @@ namespace myBlockChain.blockChain
             this.previousHash = Enumerable.Repeat((byte)0x0, 256).ToArray(); ;
             this.timestamp = DateTime.Now;
             this.data = "816534932c2b7154836da6afc367695e6337db8a921823784c14378abed4f7d7";
-            this.hash = calculateHash(this.index, this.previousHash, this.timestamp, this.data);
+            this.hash = multiThreadhash(this.index, this.previousHash, this.timestamp, this.data);
         }
     }
 }
