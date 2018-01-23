@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using Newtonsoft.Json;
-using myBlockChain.blockChain;
+using myBlockChain.dataFile;
 
 namespace ConsoleApp1
 {
+   
     class BlockChain
     {
         public List<_Block> blockChain { get; set; }

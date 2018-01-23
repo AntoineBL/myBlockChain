@@ -1,6 +1,6 @@
 ﻿using ConsoleApp1;
 using ConsoleApp1.udp;
-using myBlockChain.blockChain;
+using myBlockChain.dataFile;
 using myBlockChain.udp;
 using System;
 using System.Collections.Generic;
@@ -24,8 +24,8 @@ namespace myBlockChain.test
                 //Console.WriteLine(myBlockChaine.getBlockI(i).getIndex() + " " + myBlockChaine.getBlockI(i).getData());
             }
 
-            Json j = new Json("file.json", myBlockChaine);
-            String s = j.serialize();
+            Json<BlockChain> j = new Json<BlockChain>("file.json");
+            String s = j.serialize(myBlockChaine);
 
             UDPReceive re = new UDPReceive(1234);
             re.startReceive();

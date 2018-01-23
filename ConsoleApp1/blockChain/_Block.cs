@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 
-namespace myBlockChain.blockChain
+namespace myBlockChain.dataFile
 {
-    abstract class _Block
+    class _Block
     {
         private static byte[] difficult = { 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
@@ -18,19 +19,9 @@ namespace myBlockChain.blockChain
         public Byte[] hash { get; set; }
         public int value { get; set; }
 
-        private int nbThread  = 4;
+        private int nbThread  = 2;
         private Byte[] hashTread;
         private Boolean hashFind = false;
-
-        /*public _Block(int index, Byte[] previousHash, DateTime timestamp, String data)
-        {
-            this.index = index;
-            this.previousHash = previousHash;
-            this.timestamp = timestamp;
-            this.data = data;
-            this.hash = calculateHash(index, previousHash, timestamp, data);
-            
-        }*/
 
         public Byte[] multiThreadhash(int index, byte[] previousHash, DateTime timestamp, String data)
         {

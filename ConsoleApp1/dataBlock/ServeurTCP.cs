@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-using System;
-using System.Text;
 using System.Net;
 using System.Net.Sockets;
-
 
 namespace myBlockChain.dataBlock
 {
@@ -15,46 +9,51 @@ namespace myBlockChain.dataBlock
 
         /*   Server Program    */
         private int portNumber;
-        private Boolean stop = true;
+        private String ipAddr;
+        public Boolean stop  { get; set; }
 
-        public ServeurTCP(int portNumber)
+        public ServeurTCP(int portNumber, String ipAddr)
         {
+            stop = false;
             this.portNumber = portNumber;
+            this.ipAddr = ipAddr;
         }
 
         public void TCP()
         {
             try
             {
-                IPAddress ipAd = IPAddress.Parse("172.21.5.99");
+                IPAddress ipAd = IPAddress.Parse(this.ipAddr);
+               
                 // use local m/c IP address, and 
                 // use the same in the client
 
                 /* Initializes the Listener */
-                TcpListener myList = new TcpListener(ipAd, 8001);
+                TcpListener myList = new TcpListener(this.portNumber);
 
                 /* Start Listeneting at the specified port */
                 myList.Start();
 
-                Console.WriteLine("The server is running at port 8001...");
-                Console.WriteLine("The local End point is  :" +
+                Console.WriteLine("Serveur : The server is running at port 8001...");
+                Console.WriteLine("Serveur : The local End point is  :" +
                                   myList.LocalEndpoint);
 
-                while(true && stop){
-                    Console.WriteLine("Waiting for a connection.....");
+                while(true && !stop){
+                    Console.WriteLine("Serveur : Waiting for a connection.....");
 
-                    Socket clientSoc = myList.AcceptSocket();
-                    Console.WriteLine("Connection accepted from " + clientSoc.RemoteEndPoint);
+                    //Socket clientSoc = myList.AcceptSocket();
+                    TcpClient clientSoc = myList.AcceptTcpClient();
+                    Console.WriteLine("Serveur : Connection accepted from " + clientSoc.ToString());
+                    TCPServerThread serverThread = new TCPServerThread(clientSoc);
+                    serverThread.startReceiveData();
                 }
-                
-
                 
                 myList.Stop();
 
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error..... " + e.StackTrace);
+                Console.WriteLine("Serveur : Error..... " + e.StackTrace);
             }
         }
 

@@ -1,5 +1,5 @@
 ﻿using ConsoleApp1;
-using myBlockChain.blockChain;
+using myBlockChain.dataFile;
 using System;
 using System.Threading;
 
@@ -33,8 +33,8 @@ namespace myBlockChain.test
             Console.WriteLine("deserialize");
             BlockChain deserializedProduct = JsonConvert.DeserializeObject<BlockChain>(jsonr);*/
 
-            Json j = new Json("file.json", myBlockChaine);
-            String s = j.serialize();
+            Json<BlockChain> j = new Json<BlockChain>(@"dataFile/file.json");
+            String s = j.serialize(myBlockChaine);
             Console.WriteLine("json string : "+s);
 
             BlockChain deserializedProduct = j.deserialize();
