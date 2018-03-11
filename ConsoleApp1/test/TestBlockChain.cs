@@ -16,7 +16,7 @@ namespace myBlockChain.test
             for (int i=1; i<10; i++)
             {
                 //Thread.Sleep(1000);
-                myBlockChaine.searchBlock("test");
+                myBlockChaine.searchBlock("test", false);
                 Console.WriteLine(myBlockChaine.getBlockI(i).index+" "+ myBlockChaine.getBlockI(i).data);
             }
 

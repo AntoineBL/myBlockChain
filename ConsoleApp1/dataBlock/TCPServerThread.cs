@@ -1,4 +1,5 @@
-﻿using System;
+﻿using myBlockChain.network;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
@@ -10,10 +11,12 @@ namespace myBlockChain.dataBlock
     class TCPServerThread
     {
         TcpClient clientSoc;
+        Node node;
 
-        public TCPServerThread(TcpClient clientSoc)
+        public TCPServerThread(TcpClient clientSoc, Node node)
         {
             this.clientSoc = clientSoc;
+            this.node = node;
         }
 
         public void startReceiveData()
@@ -62,16 +65,31 @@ namespace myBlockChain.dataBlock
                 dataReceive += Convert.ToChar(bb[i]);
             }
 
-            SplitData sp = new SplitData();
-            sp.split(dataReceive);
-
-            //envoie de data
+            SplitData sp = new SplitData(dataReceive);
+            
             try
             {
                 if(sp.getGoal() == "askBlockChain")
                 {
                     Byte[] s = Encoding.ASCII.GetBytes(readFile(@"dataFile/file.json"));
                     ns.Write(s, 0, s.Length);
+                }
+                else if(sp.getGoal() == "flooding@@")
+                {
+                    node.checkBlockChainReceive(sp.getData());
+                    node.flooding(dataReceive, "dataFile/fileIPAddr.json");
+                }
+                else if(sp.getGoal() == "askConnecionSuperNode")
+                {
+                    node.addSuperNoeud(sp.getData());
+                }
+                else if(sp.getGoal() == "askConnecionSimpleNode")
+                {
+                    node.addSimpleNode(sp.getData());
+                }
+                else if(sp.getGoal() == "askConnecionSuperNode")
+                {
+                    node.addSuperNoeud(sp.getData());
                 }
                 //ns.Write(byteTime, 0, byteTime.Length);
                 ns.Close();

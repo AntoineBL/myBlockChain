@@ -1,4 +1,5 @@
-﻿using System;
+﻿using myBlockChain.network;
+using System;
 using System.Net;
 using System.Net.Sockets;
 
@@ -11,12 +12,14 @@ namespace myBlockChain.dataBlock
         private int portNumber;
         private String ipAddr;
         public Boolean stop  { get; set; }
+        Node node;
 
-        public ServeurTCP(int portNumber, String ipAddr)
+        public ServeurTCP(int portNumber, String ipAddr, Node node)
         {
             stop = false;
             this.portNumber = portNumber;
             this.ipAddr = ipAddr;
+            this.node = node;
         }
 
         public void TCP()
@@ -44,7 +47,7 @@ namespace myBlockChain.dataBlock
                     //Socket clientSoc = myList.AcceptSocket();
                     TcpClient clientSoc = myList.AcceptTcpClient();
                     Console.WriteLine("Serveur : Connection accepted from " + clientSoc.ToString());
-                    TCPServerThread serverThread = new TCPServerThread(clientSoc);
+                    TCPServerThread serverThread = new TCPServerThread(clientSoc, this.node);
                     serverThread.startReceiveData();
                 }
                 

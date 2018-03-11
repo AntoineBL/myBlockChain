@@ -18,6 +18,7 @@ namespace myBlockChain.dataFile
         public String data { get; set; }
         public Byte[] hash { get; set; }
         public int value { get; set; }
+        public Boolean stopMining { get; set; } = false;
 
         private int nbThread  = 2;
         private Byte[] hashTread;
@@ -59,7 +60,7 @@ namespace myBlockChain.dataFile
                 value = random.Next();
                 hashValue = mySHA256.ComputeHash(Encoding.ASCII.GetBytes(index + previousHash.ToString() + timestamp + data + value));
                 
-            } while (!proofOfWork(difficult, hashValue) && !this.hashFind);
+            } while (!proofOfWork(difficult, hashValue) && !this.hashFind && !stopMining);
             
             
             if(proofOfWork(difficult, hashValue))

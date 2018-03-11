@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <StartupObject>myBlockChain.test.TestNode</StartupObject>
+    <StartupObject>myBlockChain.test.Testtest</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>

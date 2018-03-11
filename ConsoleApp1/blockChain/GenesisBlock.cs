@@ -5,7 +5,7 @@ using System.Text;
 
 namespace myBlockChain.dataFile
 {
-    class GenesisBlock : _Block
+    sealed  class GenesisBlock : _Block
     {
         public GenesisBlock()
         {

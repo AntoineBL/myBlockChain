@@ -8,6 +8,11 @@ namespace myBlockChain.dataBlock
     {
         String[] dataSplit;
 
+        public SplitData(String data)
+        {
+            split(data);
+        }
+
         public void split(String data)
         {
             dataSplit = data.Split("@@");

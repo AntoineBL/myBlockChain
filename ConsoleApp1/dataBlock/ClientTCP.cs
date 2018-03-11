@@ -11,26 +11,24 @@ namespace myBlockChain.dataBlock
 
         private int portNumber;
         private String ipAddr;
-        TcpClient tcpclnt;
+        private TcpClient tcpclnt;
+        private String data;
+        private Boolean needReceive;
+        public String dataReceive { get; set; }
 
-        public ClientTCP(int portNumber, String ipAddr)
+        public ClientTCP(int portNumber, String ipAddr, String data, Boolean needReceive)
         {
             this.portNumber = portNumber;
             this.ipAddr = ipAddr;
             this.tcpclnt = new TcpClient();
             tcpclnt.Connect(this.ipAddr, portNumber);
+            this.data = data;
+            this.needReceive = needReceive;
+            
         }
 
-        public String receiveData()
+        public void sendData()
         {
-             
-            return null;
-
-        }
-
-        public String sendData(String data, Boolean needReceive)
-        {
-            String dataReceive = "";
 
             try
             {
@@ -57,14 +55,15 @@ namespace myBlockChain.dataBlock
                 {
                     byte[] bb = new byte[100000];
                     int k = stm.Read(bb, 0, 100000);
+                    this.dataReceive = "";
 
                     for (int i = 0; i < k; i++)
                     {
                         //Console.Write(Convert.ToChar(bb[i]));
-                        dataReceive += Convert.ToChar(bb[i]);
+                        this.dataReceive += Convert.ToChar(bb[i]);
                     }
-                        
-                        
+
+                    
                 }
                 
                 
@@ -76,9 +75,7 @@ namespace myBlockChain.dataBlock
             {
                 Console.WriteLine("Client : Error..... " + e.StackTrace);
             }
-
-
-            return dataReceive;
+            
         }
     }
 }

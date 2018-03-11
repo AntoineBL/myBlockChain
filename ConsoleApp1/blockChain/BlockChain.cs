@@ -69,8 +69,10 @@ namespace ConsoleApp1
         /**
          * Generate a new block for the block chain
          */
-        public _Block generateNewBlock(String blockData)
+        public _Block generateNewBlock(String blockData, Boolean newBlockChainReceive)
         {
+            //TODO stop mining when new Blockchain is receive
+
             var previousBlock = getLatestBlock();
             var nextIndex = previousBlock.index + 1;
             var nextTimestamp = DateTime.Now;
@@ -80,9 +82,15 @@ namespace ConsoleApp1
         /**
          * Add one block to the block chain
          */
-        public void searchBlock(String data)
+        public List<_Block> searchBlock(String data, Boolean newBlockChainReceive)
         {
-            this.blockChain.Add(generateNewBlock(data));            
+            _Block newBlock = generateNewBlock(data, newBlockChainReceive);
+            if(!newBlockChainReceive)
+            {
+                this.blockChain.Add(newBlock);
+            }
+            
+            return this.blockChain;
         }
 
         public _Block getBlockI(int i)

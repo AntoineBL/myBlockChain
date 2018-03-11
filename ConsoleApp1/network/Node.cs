@@ -5,32 +5,38 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.NetworkInformation;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 
 namespace myBlockChain.network
 {
-    class Node
+    abstract class Node
     {
         private int nbSimpleNode = 0;
         private int nbSuperNode = 1;
         private int portNumber = 1234;
         private String ipAddr = "127.0.0.1";
+        private List<String> listDataFlooding;
+        private BlockChain myBlockChaine;
+        private Boolean newBlockChainReceive = false;
+        private Object testBlockChain = new Object();
 
-        public void myServeur()
+
+
+        public void myClient(String data, Boolean needRecieve)
         {
-            ServeurTCP serv = new ServeurTCP(1234, "127.0.0.1");
-            Thread t = new Thread(serv.TCP);
-            t.Start();
-
-            Thread.Sleep(2000);
+            ClientTCP clt = new ClientTCP(1234, "127.0.0.1", data, needRecieve);
+            Thread tclt = new Thread(clt.sendData);
+            tclt.Start();
         }
 
         public BlockChain askBlochcaine()
         {
-            ClientTCP c = new ClientTCP(portNumber, ipAddr);
-            String blockChainS = c.sendData("askBlockChain@@", true);
-
+            ClientTCP c = new ClientTCP(portNumber, ipAddr, "askBlockChain@@", true);
+            c.sendData();
+            String blockChainS = c.dataReceive;
+                
             File.WriteAllText(@"dataFile/fileBlockChain", blockChainS);
 
             Json<BlockChain> j = new Json<BlockChain>(@"dataFile/fileBlockChain");
@@ -41,11 +47,16 @@ namespace myBlockChain.network
         public void mining()
         {
             Console.WriteLine("Start mining");
-            BlockChain myBlockChaine = new BlockChain();
+            myBlockChaine = new BlockChain();
+            Json<BlockChain> blockChainJson = new Json<BlockChain>("dataFile/fileBlockChain.json");
+            String bloChainSJ;
 
             while (true)
             {
-                myBlockChaine.searchBlock("test");
+                myBlockChaine.searchBlock("test", newBlockChainReceive);
+                bloChainSJ = blockChainJson.serialize(myBlockChaine);
+                flooding("flooding@@"+hashData(bloChainSJ)+"@@"+bloChainSJ, "dataFile/fileIPAddr.json");
+                //myClient(bloChainSJ, false);
             }
         }
 
@@ -87,7 +98,7 @@ namespace myBlockChain.network
             return time;
         }
 
-        public String[] fastestPing(String[] hostList, int nbNodeToConect)
+        public String[] fastertPing(List<String> hostList, int nbNodeToConect)
         {
             long[] bestTime = new long[nbNodeToConect];
             String[] bestHost  = new String[nbNodeToConect];
@@ -100,18 +111,18 @@ namespace myBlockChain.network
             foreach(String host in hostList)
             {
                 long currentTime = ping(host);
-                long lastesTime = 0;
+                long latesTime = 0;
                 for(int i=0; i<bestTime.Length; i++)
                 {
-                    if(bestTime[i] > lastesTime)
+                    if(bestTime[i] > latesTime)
                     {
-                        lastesTime = i;
+                        latesTime = i;
                     }
                 }
 
-                if (bestTime[lastesTime] > currentTime){
-                    bestTime[lastesTime] = currentTime;
-                    bestHost[lastesTime] = host;
+                if (bestTime[latesTime] > currentTime){
+                    bestTime[latesTime] = currentTime;
+                    bestHost[latesTime] = host;
                 }
             }
 
@@ -120,12 +131,83 @@ namespace myBlockChain.network
 
         public void flooding(String data, String nameFile)
         {
-            
+            //change json in simple file
             IPAddressList l = new IPAddressList();
             Json<IPAddressList> j = new Json<IPAddressList>(@nameFile);
             l = j.deserialize();
-            l.ToString();
+
+            SplitData dataSplit = new SplitData(data);
+            dataSplit.getHash();
+
+            if (!listDataFlooding.Contains(dataSplit.getHash()))
+            {
+                foreach (String addr in l.listIPAddr)
+                {
+                    ClientTCP clt = new ClientTCP(1234, addr, data, false);
+                    Thread tclt = new Thread(clt.sendData);
+                    tclt.Start();
+                }
+
+                String hashString = "";
+                for (int i = 0; i < dataSplit.getHash().Length; i++)
+                {
+                    //Console.Write(Convert.ToChar(dataSplit.getHash()[i]));
+                    hashString += Convert.ToChar(dataSplit.getHash()[i]);
+                }
+
+                listDataFlooding.Add(hashString);
+            }  
+
+        }
+
+        private Byte[] hashData(String data)
+        {
+            SHA256 mySHA256 = SHA256Managed.Create();
+            return mySHA256.ComputeHash(Encoding.ASCII.GetBytes(data));
+        }
+
+        public virtual void askAddNetwork()
+        {
+            //recuperer toutes les addresse des super noeuds
+            //choisir celui qui a la plus petit ping
+            //demander de se rajouter au réseau
             
+        }
+
+        public void checkBlockChainReceive(String blockChainString)
+        {
+            
+            lock (testBlockChain)
+            {
+                File.WriteAllText(@"dataFile/fileBlockChainReceive.json", blockChainString);
+                Json<BlockChain> blockChainJ = new Json<BlockChain>(@"dataFile/fileBlockChainReceive.json");
+                BlockChain blockChainReceive = blockChainJ.deserialize();
+
+                if (blockChainReceive.blockChain.Count > myBlockChaine.blockChain.Count)
+                {
+                    if (blockChainReceive.isValidChain())
+                    {
+                        myBlockChaine = blockChainReceive;
+
+                    }
+                }
+            }
+            
+
+        }
+
+        public void addSuperNoeud(String newSuperIPAddr)
+        {
+            StreamWriter sw = new StreamWriter("dataFile/fileSuperIPAddr", true);
+            sw.WriteLine(newSuperIPAddr);
+            sw.Close();
+        }
+
+        public void addSimpleNode(String newSuperIPAddr)
+        {
+            StreamWriter sw = new StreamWriter("dataFile/fileSimpleIPAddr", true);
+            sw.WriteLine(newSuperIPAddr);
+            sw.Close();
         }
     }
 }

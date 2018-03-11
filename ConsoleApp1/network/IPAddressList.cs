@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
 
 namespace myBlockChain.network
 {
-    class IPAddressList
+    class IPAddressList 
     {
         public List<String> listIPAddr { get; set; }
+
+        public object Current => throw new NotImplementedException();
 
         public IPAddressList()
         {
@@ -19,6 +22,7 @@ namespace myBlockChain.network
             listIPAddr.Add(ipAddr);
         }
 
+        
 
         public void ToString()
         {
@@ -28,5 +32,7 @@ namespace myBlockChain.network
             }
             Console.WriteLine();
         }
+
+    
     }
 }

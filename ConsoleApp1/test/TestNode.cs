@@ -14,7 +14,7 @@ namespace myBlockChain.test
 
         static public void Main()
         {
-            Node n = new Node();
+            Node n = new SimpleNode();
             IPAddressList ip = new IPAddressList();
 
 
@@ -38,7 +38,7 @@ namespace myBlockChain.test
 
             n.flooding("azer", @"dataFile/fileIPAddr.json");
 
-            n.myServeur();
+            ////////////////////////////////////////n.myServeur();
             BlockChain b = n.askBlochcaine();
             Console.WriteLine("\n\n write new blockchain receive");
 
